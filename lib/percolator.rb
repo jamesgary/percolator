@@ -1,14 +1,20 @@
+require 'json'
+
 class Percolator
   def initialize
-    #@parti = World.new
+    @particles = []
   end
 
   def step(steps = 1)
   end
 
+  def add_particle(p)
+    @particles.push(p)
+  end
+
   def to_json
     {
-      particles: []
+      particles: @particles.map(&:to_json)
     }
   end
 end

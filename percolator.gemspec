@@ -9,5 +9,7 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.files = Dir.glob('lib/**/*')# + %w(LICENSE README.markdown Rakefile)
 
-  s.add_development_dependency 'rspec', '~> 2.0'
+  s.add_development_dependency 'guard-rspec'
+  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'rb-fsevent'
 end

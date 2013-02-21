@@ -34,8 +34,9 @@
         var draw = function(ctx, frame) {
           ctx.clearRect(0, 0, WIDTH, HEIGHT);
           $.each(frame.particles, function(key, p) {
+            pos = p.pos;
             ctx.beginPath();
-            ctx.arc(p.x, p.y, 10, 0, 2 * Math.PI, false);
+            ctx.arc(pos.x, pos.y, 10, 0, 2 * Math.PI, false);
             ctx.fill();
             ctx.stroke();
           });

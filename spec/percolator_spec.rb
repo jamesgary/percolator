@@ -9,20 +9,17 @@ describe Percolator do
 
   it 'simulates static particles' do
     100.times do
-      p = Percolator::Particle.new(
-        x: rand(WIDTH),
-        y: rand(HEIGHT),
-      )
-      percolator.add_particle(p)
+      percolator.add_particle(random_particle)
     end
     particles = percolator.particles
 
     expect(particles.length).to eq 100
     particles.each do |p|
-      expect(p.x).to be > 0
-      expect(p.y).to be > 0
-      expect(p.x).to be < WIDTH
-      expect(p.y).to be < HEIGHT
+      pos = p.pos
+      expect(pos.x).to be > 0
+      expect(pos.y).to be > 0
+      expect(pos.x).to be < WIDTH
+      expect(pos.y).to be < HEIGHT
     end
 
     write_to_file([percolator.to_h], 'static')
@@ -30,11 +27,7 @@ describe Percolator do
 
   it 'simulates falling particles' do
     10.times do
-      p = Percolator::Particle.new(
-        x: rand(WIDTH),
-        y: rand(HEIGHT),
-      )
-      percolator.add_particle(p)
+      percolator.add_particle(random_particle)
     end
 
     frames = []
@@ -52,6 +45,12 @@ describe Percolator do
 
   def rand(num)
     Random.rand(num)
+  end
+
+  def random_particle
+    Percolator::Particle.new(
+      pos: Percolator::Vector.new(rand(WIDTH), rand(HEIGHT))
+    )
   end
 
   def write_to_file(content, filename)

@@ -28,24 +28,56 @@ class Percolator
     def set(x, y)
       @x = x
       @y = y
+      self
     end
 
     # Add a vector to this one
     def add(v)
       @x += v.x
       @y += v.y
+      self
     end
 
     # Subtracts a vector from this one
     def sub(v)
       @x -= v.x
       @y -= v.y
+      self
     end
 
     # Scales this vector by a value
     def scale(f)
       @x *= f
       @y *= f
+      self
+    end
+
+    # Normalises the vector, making it a unit vector (of length 1)
+    def norm
+      m = mag
+      @x /= m
+      @y /= m
+      self
+    end
+
+    # Limits the vector length to a given amount
+    def limit(l)
+      mSq = @x*@x + @y*@y
+      if mSq > l*l
+        m = Math.sqrt(mSq)
+        @x /= m
+        @y /= m
+        @x *= l
+        @y *= l
+      end
+      self
+    end
+
+    # more memory efficient way of `v1 = v2.dup`
+    def become(v)
+      @x = v.x
+      @y = v.y
+      self
     end
 
     # Computes the dot product between vectors
@@ -80,36 +112,6 @@ class Percolator
       dx = v.x - @x
       dy = v.y - @y
       dx*dx + dy*dy
-    end
-
-    # Normalises the vector, making it a unit vector (of length 1)
-    def norm
-      m = mag
-      @x /= m
-      @y /= m
-    end
-
-    # Limits the vector length to a given amount
-    def limit(l)
-      mSq = @x*@x + @y*@y
-      if mSq > l*l
-        m = Math.sqrt(mSq)
-        @x /= m
-        @y /= m
-        @x *= l
-        @y *= l
-      end
-    end
-
-    # Copies components from another vector
-    def copy(v)
-      @x = v.x
-      @y = v.y
-    end
-
-    # Clones this vector to a new itentical one
-    def clone
-      Vector.new(@x, @y)
     end
 
     # Resets the vector to zero

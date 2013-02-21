@@ -3,13 +3,21 @@ require 'json'
 class Percolator
   attr_reader :particles
 
-  def initialize
+  def initialize(integrator = Integrators::Euler)
+    @integrator = integrator
+    @viscosity = 0.005
+    @drag = 1.0 - @viscosity
+    @precision = 4 # Iterations per step
+    @dt = 1.0 / @precision
+
+    @behaviors = [] # Global behaviors
     @particles = []
+    @springs   = []
   end
 
   def step(steps = 1)
-    @particles.each do |p|
-      #p.y += 1.0
+    steps.times do
+      integrate
     end
   end
 
@@ -18,11 +26,28 @@ class Percolator
   end
 
   def to_h
-    {
-      particles: @particles.map(&:to_h)
-    }
+    { particles: @particles.map(&:to_h) }
+  end
+
+  private
+
+  def integrate
+    @particles.each do |p|
+      @behaviors.each { |b| b.apply(p, @dt) }
+      p.update(@dt)
+    end
+
+    @integrator.integrate(@particles, @dt, @drag)
+
+    # @springs.each do |s|
+    #   s.apply()
+    # end
   end
 end
 
+# core
 require 'percolator/vector'
 require 'percolator/particle'
+
+# integrators
+require 'percolator/integrators/euler'

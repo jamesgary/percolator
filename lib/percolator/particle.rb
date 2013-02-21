@@ -8,7 +8,7 @@ class Percolator
       fixed: false,
     }
 
-    attr_reader :pos
+    attr_reader :pos, :vel, :acc, :mass_inv
 
     def initialize(params)
       # Set a unique id.
@@ -21,23 +21,17 @@ class Percolator
       @pos    = full_params[:pos] || Vector.new
       @vel    = full_params[:vel] || Vector.new
 
-      @behaviours = []
+      @behaviors = []
       @acc = Vector.new
-      @old = {
-        pos: Vector.new,
-        vel: Vector.new,
-        acc: Vector.new,
-      }
     end
 
     def moveTo(pos)
-      @pos.copy(pos)
-      @old.pos.copy(pos)
+      @pos.become(pos)
     end
 
     def setMass(mass = 1.0)
       @mass = mass
-      @massInv = 1.0 / @mass
+      @mass_inv = 1.0 / @mass
     end
 
     def setRadius(radius = 1.0)
@@ -45,11 +39,15 @@ class Percolator
       @radiusSq = @radius * @radius
     end
 
+    def fixed?
+      !!@fixed
+    end
+
     # Applies all behaviors to derive new force
-    def update(dt, index)
+    def update(dt)
       unless @fixed
         @behaviors.each do |behavior|
-          behavior.modify(self, dt, index)
+          behavior.affect(self, dt, index)
         end
       end
     end

@@ -9,7 +9,9 @@ describe Percolator do
 
   it 'simulates static particles' do
     100.times do
-      percolator.add_particle(random_particle)
+      percolator.add_particle(Percolator::Particle.new(
+        pos: Percolator::Vector.new(rand(WIDTH), rand(HEIGHT))
+      ))
     end
     particles = percolator.particles
 
@@ -25,9 +27,13 @@ describe Percolator do
     write_to_file([percolator.to_h], 'static')
   end
 
-  it 'simulates falling particles' do
+  it 'simulates sliding particles' do
+    speed_range = -10.0..10.0
     10.times do
-      percolator.add_particle(random_particle)
+      percolator.add_particle(Percolator::Particle.new(
+        pos: Percolator::Vector.new(rand(WIDTH), rand(HEIGHT)),
+        vel: Percolator::Vector.new(rand(speed_range), rand(speed_range))
+      ))
     end
 
     frames = []

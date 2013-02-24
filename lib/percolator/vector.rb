@@ -2,26 +2,9 @@ class Percolator
   class Vector
     attr_accessor :x, :y
 
-    def initialize(x = 0, y = 0)
+    def initialize(x = 0.0, y = 0.0)
       @x = x
       @y = y
-    end
-
-    class << self
-      # Adds two vectors and returns the product
-      def add(v1, v2)
-        Vector.new(v1.x + v2.x, v1.y + v2.y)
-      end
-
-      # Subtracts v2 from v1 and returns the product
-      def sub(v1, v2)
-        Vector.new(v1.x - v2.x, v1.y - v2.y)
-      end
-
-      # Projects one vector (v1) onto another (v2)
-      def project(v1, v2)
-        v1.clone.scale(v1.dot(v2) / v1.magSq)
-      end
     end
 
     # Sets the components of this vector

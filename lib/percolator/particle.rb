@@ -8,7 +8,7 @@ class Percolator
       fixed: false,
     }
 
-    attr_reader :pos, :vel, :acc, :mass_inv
+    attr_reader :pos, :vel, :acc, :mass_inv, :radius, :mass
 
     def initialize(params)
       # Set a unique id.
@@ -56,6 +56,8 @@ class Percolator
       {
         pos: @pos.to_h,
         vel: @vel.to_h,
+        radius: @radius,
+        mass: @mass,
       }
     end
   end

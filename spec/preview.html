@@ -34,9 +34,10 @@
         var draw = function(ctx, frame) {
           ctx.clearRect(0, 0, WIDTH, HEIGHT);
           $.each(frame.particles, function(key, p) {
+            radius = p.radius;
             pos = p.pos;
             ctx.beginPath();
-            ctx.arc(pos.x, pos.y, 10, 0, 2 * Math.PI, false);
+            ctx.arc(pos.x, pos.y, radius, 0, 2 * Math.PI, false);
             ctx.fill();
             ctx.stroke();
           });
@@ -64,6 +65,7 @@
   </head>
   <body>
     <canvas data-source='static'></canvas>
-    <canvas data-source='falling'></canvas>
+    <canvas data-source='sliding'></canvas>
+    <canvas data-source='colliding'></canvas>
   </body>
 </html>

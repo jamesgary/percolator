@@ -4,14 +4,18 @@ describe Percolator do
   WIDTH  = 400.0
   HEIGHT = 300.0
   RESULTS_DIR = 'tmp/spec_data/'
+  SPEED_RANGE = -10.0..10.0
 
   let(:percolator) { Percolator.new }
 
   it 'simulates static particles' do
     100.times do
-      percolator.add_particle(Percolator::Particle.new(
+      Percolator::Particle.new(
+        radius: 10,
         pos: Percolator::Vector.new(rand(WIDTH), rand(HEIGHT))
-      ))
+      ).tap do |p|
+        percolator.add_particle(p)
+      end
     end
     particles = percolator.particles
 
@@ -28,12 +32,14 @@ describe Percolator do
   end
 
   it 'simulates sliding particles' do
-    speed_range = -10.0..10.0
     10.times do
-      percolator.add_particle(Percolator::Particle.new(
+      Percolator::Particle.new(
+        radius: 10,
         pos: Percolator::Vector.new(rand(WIDTH), rand(HEIGHT)),
-        vel: Percolator::Vector.new(rand(speed_range), rand(speed_range))
-      ))
+        vel: Percolator::Vector.new(rand(SPEED_RANGE), rand(SPEED_RANGE))
+      ).tap do |p|
+        percolator.add_particle(p)
+      end
     end
 
     frames = []
@@ -42,9 +48,33 @@ describe Percolator do
       percolator.step
     end
 
-    write_to_file(frames, 'falling')
+    write_to_file(frames, 'sliding')
   end
-  #it 'simulates colliding particles'
+
+  it 'simulates colliding particles' do
+    collision = Percolator::Collision.new
+    20.times do
+      Percolator::Particle.new(
+        radius: 10,
+        pos: Percolator::Vector.new(rand(WIDTH), rand(HEIGHT)),
+        vel: Percolator::Vector.new(rand(SPEED_RANGE), rand(SPEED_RANGE))
+      ).tap do |p|
+        percolator.add_particle(p)
+        collision.add_particle(p)
+      end
+    end
+
+    percolator.add_behavior(collision)
+
+    frames = []
+    120.times do
+      frames.push(percolator.to_h);
+      percolator.step
+    end
+
+    write_to_file(frames, 'colliding')
+  end
+
   #it 'simulates colliding bouncing particles'
 
   private

@@ -25,6 +25,10 @@ class Percolator
     @particles.push(p)
   end
 
+  def add_behavior(behavior)
+    @behaviors.push(behavior)
+  end
+
   def to_h
     { particles: @particles.map(&:to_h) }
   end
@@ -32,8 +36,8 @@ class Percolator
   private
 
   def integrate
-    @particles.each do |p|
-      @behaviors.each { |b| b.apply(p, @dt) }
+    @particles.each_with_index do |p, index|
+      @behaviors.each { |b| b.apply(p, @dt, index) }
       p.update(@dt)
     end
 
@@ -48,6 +52,9 @@ end
 # core
 require 'percolator/vector'
 require 'percolator/particle'
+
+# behaviors
+require 'percolator/behaviors/collision'
 
 # integrators
 require 'percolator/integrators/euler'

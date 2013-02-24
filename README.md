@@ -6,13 +6,14 @@ __Still in pre-alpha state, not production ready__
 
 ## Usage
 
-This example will build a 50 lightweight and 50 heavyweight colliding particles in a bounded box.
+This example will build a 50 lightweight and 50 heavyweight colliding particles in a bounded box (see more examples in `spec/percolator_spec.rb`):
 
 ```ruby
+percolator = Percolator.new
 collision  = Percolator::Behaviors::Collision.new
 edge_bound = Percolator::Behaviors::EdgeBound.new(
-  Percolator::Vector.new(0, 0),
-  Percolator::Vector.new(WIDTH, HEIGHT)
+  Percolator::Vector.new(0, 0), # min
+  Percolator::Vector.new(WIDTH, HEIGHT) # max
 )
 50.times do
   Percolator::Particle.new(

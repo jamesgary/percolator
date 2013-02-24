@@ -53,9 +53,21 @@ describe Percolator do
 
   it 'simulates colliding particles' do
     collision = Percolator::Collision.new
-    20.times do
+    50.times do
       Percolator::Particle.new(
-        radius: 10,
+        radius: 7,
+        mass: 1.0,
+        pos: Percolator::Vector.new(rand(WIDTH), rand(HEIGHT)),
+        vel: Percolator::Vector.new(rand(SPEED_RANGE), rand(SPEED_RANGE))
+      ).tap do |p|
+        percolator.add_particle(p)
+        collision.add_particle(p)
+      end
+    end
+    50.times do
+      Percolator::Particle.new(
+        radius: 9,
+        mass: 2.0,
         pos: Percolator::Vector.new(rand(WIDTH), rand(HEIGHT)),
         vel: Percolator::Vector.new(rand(SPEED_RANGE), rand(SPEED_RANGE))
       ).tap do |p|

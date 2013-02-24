@@ -1,22 +1,73 @@
-Just port Coffee-Physics
+# Percolator
+
+Simple particle-based physics engine
+
+__Still in pre-alpha state, not production ready__
+
+## Usage
+
+This example will build a 50 lightweight and 50 heavyweight colliding particles in a bounded box.
 
 ```ruby
-perc = Percolator.new(...)
-particle = Percolator::Particle.new(...)
-perc.add(particle)
+collision  = Percolator::Behaviors::Collision.new
+edge_bound = Percolator::Behaviors::EdgeBound.new(
+  Percolator::Vector.new(0, 0),
+  Percolator::Vector.new(WIDTH, HEIGHT)
+)
+50.times do
+  Percolator::Particle.new(
+    radius: 7,
+    mass: 1.0,
+    pos: Percolator::Vector.new(rand(WIDTH), rand(HEIGHT)),
+    vel: Percolator::Vector.new(rand(SPEED_RANGE), rand(SPEED_RANGE))
+  ).tap do |p|
+    percolator.add_particle(p)
+    collision.add_particle(p)
+  end
+end
+50.times do
+  Percolator::Particle.new(
+    radius: 9,
+    mass: 2.0,
+    pos: Percolator::Vector.new(rand(WIDTH), rand(HEIGHT)),
+    vel: Percolator::Vector.new(rand(SPEED_RANGE), rand(SPEED_RANGE))
+  ).tap do |p|
+    percolator.add_particle(p)
+    collision.add_particle(p)
+  end
+end
 
-perc.current_step => step_index
-perc.step(number_of_steps_to_take)
-perc.step_to(step_index)
-
-perc.json_state
-
-perc.collect_garbage
+percolator.add_behavior(collision)
+percolator.add_behavior(edge_bound)
 ```
 
-For testing:
+To simulate and save the state of each step:
 
-rake showme
+```ruby
+frames = []
+120.times do
+  frames.push(percolator.to_h);
+  percolator.step
+end
+json = JSON.generate(content)
+```
 
-- generate json file for 'frames' of [bouncing, colliding, fast bullets, effects, etc]
-- generate html file w/ canvas to point to json and animate/loop
+## Testing
+
+Run `bundle exec guard` to automatically run the tests. If you want to see the actual simulation, start a local server (by running something like `python -m SimpleHTTPServer 8000`) You can then open `http://localhost:8000/spec/preview.html` to see animated demos.
+
+## Todo
+
+- More behaviors
+- Benchmarking
+  - Algorithms
+  - MRI vs Jruby vs Rubinius
+  - GC optimization
+
+## Credits
+
+- Heavily influenced by [Soulwire's Coffee-Physics](http://github.com/soulwire/Coffee-Physics)
+
+## License
+
+Percolator is released under the [MIT License](http://opensource.org/licenses/MIT).

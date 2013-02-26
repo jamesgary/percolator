@@ -1,10 +1,10 @@
 PATH
   remote: .
   specs:
-    percolator (0.0.1)
+    percolator (0.0.1.prealpha)
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     coderay (1.0.8)
     diff-lcs (1.1.3)

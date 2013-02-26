@@ -128,6 +128,38 @@ describe Percolator do
     write_to_file(frames, 'edgebound')
   end
 
+  it 'simulates attracting particles' do
+    attraction = Percolator::Behaviors::Attraction.new(target: Percolator::Vector.new(20, 20))
+    collision  = Percolator::Behaviors::Collision.new
+    edge_bound = Percolator::Behaviors::EdgeBound.new(
+      Percolator::Vector.new(0, 0),
+      Percolator::Vector.new(WIDTH, HEIGHT)
+    )
+    10.times do
+      Percolator::Particle.new(
+        radius: 10,
+        pos: Percolator::Vector.new(rand(WIDTH), rand(HEIGHT)),
+        vel: Percolator::Vector.new(rand(SPEED_RANGE), rand(SPEED_RANGE))
+      ).tap do |p|
+        percolator.add_particle(p)
+        collision.add_particle(p)
+      end
+    end
+
+    percolator.add_behavior(attraction)
+    percolator.add_behavior(collision)
+    percolator.add_behavior(edge_bound)
+
+    frames = []
+    120.times do
+      frames.push(percolator.to_h);
+      percolator.step
+    end
+
+    write_to_file(frames, 'attraction')
+  end
+
+
   private
 
   def rand(num)

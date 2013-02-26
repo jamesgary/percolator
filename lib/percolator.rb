@@ -54,6 +54,7 @@ require 'percolator/vector'
 require 'percolator/particle'
 
 # behaviors
+require 'percolator/behaviors/attraction'
 require 'percolator/behaviors/collision'
 require 'percolator/behaviors/edge_bound'
 

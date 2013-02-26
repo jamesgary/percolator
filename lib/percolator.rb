@@ -29,6 +29,10 @@ class Percolator
     @behaviors.push(behavior)
   end
 
+  def remove_behavior(behavior)
+    @behaviors.delete(behavior)
+  end
+
   def to_h
     { particles: @particles.map(&:to_h) }
   end
